@@ -1,0 +1,88 @@
+# === BUILD OUTPUT ===
+/dist
+/build
+
+# === DEPENDENCIES ===
+/node_modules
+
+# === LOGS ===
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === RUNTIME FILES ===
+pids
+*.pid
+*.pid.lock
+*.seed
+*.log.[0-9]*
+
+# === ENVIRONMENT VARIABLES ===
+.env
+.env.*.local
+.env.local
+!.env.example
+
+# === OS FILES ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+Icon?
+._*
+
+# === TESTING ===
+/coverage
+/.nyc_output
+/test-results
+
+# === TYPESCRIPT ===
+*.tsbuildinfo
+.tsbuildinfo
+
+# === TEMP FILES ===
+.temp
+.tmp
+.cache
+*.swp
+
+# === IDEs ===
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+*.launch
+.settings/
+*.iml
+
+# === NESTJS ===
+.nest-cli.json
+.swagger.json
+
+# === DIAGNOSTIC REPORTS ===
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# === CLOUD STORAGE TEMP FILES ===
+uploads/
+storage/
+
+# === DOCKER ===
+*.localdev.*
+docker-compose.override.yml
+.docker/
+
+# === DATABASE ===
+*.sqlite
+*.db
+*.sql
+*.dump
+
+# === MISC ===
+*.bak
+*.old
+*.orig
+*.rej
