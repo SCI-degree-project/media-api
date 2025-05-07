@@ -1,42 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { ConfigService } from '@nestjs/config';
-import { v4 as uuid } from 'uuid';
+import { Inject, Injectable } from '@nestjs/common';
+import { StorageAdapter } from '../storage/storage.adapter';
+import { Media } from '../entities/media.entity';
 
 @Injectable()
 export class MediaService {
-    private s3: S3Client;
-    private bucket: string;
+  constructor(
+    @Inject('StorageAdapter') private readonly storage: StorageAdapter,
+) {}
 
-    constructor(private config: ConfigService) {
-        this.bucket = this.config.get('R2_BUCKET_NAME')!;
-        this.s3 = new S3Client({
-            region: this.config.get('R2_REGION')!,
-            endpoint: this.config.get('R2_ENDPOINT')!,
-            credentials: {
-                accessKeyId: this.config.get('R2_ACCESS_KEY_ID')!,
-                secretAccessKey: this.config.get('R2_SECRET_ACCESS_KEY')!,
-            },
-        });
+  async uploadFile(
+    file: Express.Multer.File,
+    tenantId: string,
+    productId: string,
+  ): Promise<Media> {
+    const { key, url } = await this.storage.upload(
+      file.buffer,
+      file.originalname,
+      file.mimetype,
+    );
 
-    }
+    const media: Media = {
+      id: crypto.randomUUID(),
+      tenantId,
+      productId,
+      key,
+      url,
+      type: file.mimetype.includes('image') ? 'image' : 'model',
+      createdAt: new Date(),
+    };
 
-    async uploadFile(file: Express.Multer.File) {
-        const key = `${uuid()}-${file.originalname}`;
-
-        await this.s3.send(
-            new PutObjectCommand({
-                Bucket: this.bucket,
-                Key: key,
-                Body: file.buffer,
-                ContentType: file.mimetype,
-            }),
-        );
-
-        return {
-            url: `${this.config.get('R2_ENDPOINT')}/${this.bucket}/${key}`,
-            key,
-            type: file.mimetype,
-        };
-    }
+    return media;
+  }
 }
